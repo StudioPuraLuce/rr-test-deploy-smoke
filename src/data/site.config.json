@@ -1,19 +1,13 @@
 {
-  "projectId": "be8e444d-0843-43ef-a76c-6f83a8652882",
-  "niche": "idraulico",
-  "city": "Formia",
-  "services": [
-    "riparazione-perdite",
-    "installazione-caldaie"
-  ],
-  "zones": [
-    "centro",
-    "nord"
-  ],
+  "projectId": "test-project-001",
+  "niche": "ristrutturazioni",
+  "city": "formia",
+  "services": ["ristrutturazioni-interni", "rifacimento-bagno", "ristrutturazioni-esterni"],
+  "zones": ["formia", "gaeta", "minturno", "fondi", "terracina", "sperlonga", "itri", "cassino", "frosinone"],
   "avatar": "in-pain",
   "factoryApi": "https://factory-core.soliwkr.workers.dev",
-  "slug": "test-deploy-smoke",
-  "domain": null,
+  "slug": "ristrutturazioni-formia",
+  "domain": "ristrutturazioniformia.it",
   "gmbPlaceId": null,
   "ga4MeasurementId": null,
   "businessName": null,

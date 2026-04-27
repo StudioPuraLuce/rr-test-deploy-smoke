@@ -1,0 +1,44 @@
+---
+// ATTENZIONE: body è HTML generato da Phase 3 — mai iniettare contenuto da input utente (T-02-09)
+import Layout from '../../layouts/Layout.astro';
+import SchemaGraph from '../../components/SchemaGraph.astro';
+import InternalLinks from '../../components/InternalLinks.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import siteConfig from '../../data/site.config.json';
+import { fetchAllPages, requirePage } from '../../lib/fetchPages';
+import type { PageContent } from '../../lib/fetchPages';
+
+export async function getStaticPaths() {
+  const pages = await fetchAllPages();
+  return siteConfig.services.map(service => ({
+    params: { service: String(service) },
+    props: { content: requirePage(pages, service) }
+  }));
+}
+
+const { content } = Astro.props as { content: PageContent };
+const { service } = Astro.params;
+const siteUrl = `https://${siteConfig.domain}`;
+
+const breadcrumbs = [
+  { name: 'Home', url: `${siteUrl}/` },
+  { name: service.replace(/-/g, ' '), url: `${siteUrl}/${service}/` }
+];
+---
+
+<Layout title={content.title} description={content.meta.description} canonical={`${siteUrl}/${service}/`}>
+  <SchemaGraph
+    slot="head"
+    pageType="service"
+    serviceSlug={service}
+    faqs={content.faq}
+    breadcrumbs={breadcrumbs}
+  />
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <Breadcrumb items={breadcrumbs} />
+    <Fragment set:html={content.body} />
+    <InternalLinks currentService={service} pageType="service" />
+    <ContactForm projectId={siteConfig.projectId} projectName={siteConfig.slug} />
+  </main>
+</Layout>

@@ -1,0 +1,19 @@
+---
+import { buildSchemaGraph } from '../lib/buildSchemaGraph';
+import siteConfig from '../data/site.config.json';
+import type { FaqItem, BreadcrumbItem } from '../types/site';
+
+interface Props {
+  pageType: 'homepage' | 'service' | 'zone' | 'service_zone' | 'blog' | 'blog_post';
+  serviceSlug?: string;
+  zoneSlug?: string;
+  faqs?: FaqItem[];
+  breadcrumbs: BreadcrumbItem[];
+}
+
+const { pageType, serviceSlug, zoneSlug, faqs = [], breadcrumbs } = Astro.props;
+
+const schema = buildSchemaGraph(siteConfig as any, { pageType, serviceSlug, zoneSlug, faqs, breadcrumbs });
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

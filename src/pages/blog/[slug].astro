@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SchemaGraph from '../../components/SchemaGraph.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import siteConfig from '../../data/site.config.json';
+import { fetchAllPages } from '../../lib/fetchPages';
+import type { PageContent } from '../../lib/fetchPages';
+
+export async function getStaticPaths() {
+  const pages = await fetchAllPages();
+  const blogPages = pages.filter(p => p.type === 'blog');
+  if (blogPages.length === 0) {
+    // Nessun contenuto blog ancora (Phase 3 non eseguita) — build non genera pagine blog
+    return [];
+  }
+  return blogPages.map(page => ({
+    params: { slug: String(page.slug.replace('blog/', '')) },
+    props: { content: page }
+  }));
+}
+
+const { content } = Astro.props as { content: PageContent };
+const { slug } = Astro.params;
+const siteUrl = `https://${siteConfig.domain}`;
+
+const breadcrumbs = [
+  { name: 'Home', url: `${siteUrl}/` },
+  { name: 'Blog', url: `${siteUrl}/blog/` },
+  { name: content.title, url: `${siteUrl}/blog/${slug}/` }
+];
+---
+
+<Layout
+  title={content.title}
+  description={content.meta.description}
+  canonical={`${siteUrl}/blog/${slug}/`}
+>
+  <SchemaGraph
+    slot="head"
+    pageType="blog_post"
+    breadcrumbs={breadcrumbs}
+  />
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <Breadcrumb items={breadcrumbs} />
+    <article>
+      <h1 class="text-3xl font-bold mb-6">{content.title}</h1>
+      <!-- ATTENZIONE: body è HTML generato da Phase 3 — mai iniettare contenuto da input utente (T-02-09) -->
+      <Fragment set:html={content.body} />
+    </article>
+    <div class="mt-8">
+      <a href="/blog/" class="text-blue-600 hover:underline">&larr; Tutti gli articoli</a>
+    </div>
+  </main>
+</Layout>

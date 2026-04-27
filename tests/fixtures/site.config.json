@@ -1,0 +1,17 @@
+{
+  "projectId": "test-project-001",
+  "niche": "ristrutturazioni",
+  "city": "formia",
+  "services": ["ristrutturazioni-interni", "rifacimento-bagno"],
+  "zones": ["formia", "gaeta", "minturno"],
+  "avatar": "in-pain",
+  "factoryApi": "https://factory-core.soliwkr.workers.dev",
+  "slug": "ristrutturazioni-formia",
+  "domain": "ristrutturazioniformia.it",
+  "gmbPlaceId": null,
+  "ga4MeasurementId": null,
+  "businessName": null,
+  "phone": null,
+  "address": null,
+  "geo": null
+}

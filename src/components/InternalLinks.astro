@@ -1,0 +1,74 @@
+---
+import siteConfig from '../data/site.config.json';
+
+interface Props {
+  currentService?: string;
+  currentZone?: string;
+  pageType: 'service' | 'zone' | 'service_zone';
+}
+const { currentService, currentZone, pageType } = Astro.props;
+
+// Link alle pagine sorelle — calcolati al build time (D-09)
+const siblingServiceLinks = (currentZone && pageType === 'service_zone')
+  ? siteConfig.services
+      .filter(s => s !== currentService)
+      .map(s => ({ href: `/${s}/${currentZone}/`, label: s.replace(/-/g, ' ') }))
+  : [];
+
+const siblingZoneLinks = (currentService && pageType === 'service_zone')
+  ? siteConfig.zones
+      .filter(z => z !== currentZone)
+      .map(z => ({ href: `/${currentService}/${z}/`, label: z }))
+  : [];
+
+const allZoneLinks = (pageType === 'service' && currentService)
+  ? siteConfig.zones.map(z => ({ href: `/${currentService}/${z}/`, label: z }))
+  : [];
+
+const allServiceLinks = (pageType === 'zone' && currentZone)
+  ? siteConfig.services.map(s => ({ href: `/${s}/${currentZone}/`, label: s.replace(/-/g, ' ') }))
+  : [];
+---
+
+<aside class="mt-8 border-t pt-6">
+  {siblingServiceLinks.length > 0 && (
+    <div class="mb-4">
+      <h3 class="text-sm font-semibold text-gray-700 mb-2">Altri servizi a {currentZone}</h3>
+      <ul class="flex flex-wrap gap-2">
+        {siblingServiceLinks.map(l => (
+          <li><a href={l.href} class="text-sm text-blue-600 hover:underline">{l.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  )}
+  {siblingZoneLinks.length > 0 && (
+    <div class="mb-4">
+      <h3 class="text-sm font-semibold text-gray-700 mb-2">{currentService?.replace(/-/g, ' ')} in altre zone</h3>
+      <ul class="flex flex-wrap gap-2">
+        {siblingZoneLinks.map(l => (
+          <li><a href={l.href} class="text-sm text-blue-600 hover:underline">{l.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  )}
+  {allZoneLinks.length > 0 && (
+    <div class="mb-4">
+      <h3 class="text-sm font-semibold text-gray-700 mb-2">Zone servite</h3>
+      <ul class="flex flex-wrap gap-2">
+        {allZoneLinks.map(l => (
+          <li><a href={l.href} class="text-sm text-blue-600 hover:underline">{l.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  )}
+  {allServiceLinks.length > 0 && (
+    <div class="mb-4">
+      <h3 class="text-sm font-semibold text-gray-700 mb-2">Servizi disponibili in questa zona</h3>
+      <ul class="flex flex-wrap gap-2">
+        {allServiceLinks.map(l => (
+          <li><a href={l.href} class="text-sm text-blue-600 hover:underline">{l.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  )}
+</aside>

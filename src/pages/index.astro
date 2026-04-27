@@ -1,0 +1,27 @@
+---
+// ATTENZIONE: body è HTML generato da Phase 3 — mai iniettare contenuto da input utente (T-02-09)
+import Layout from '../layouts/Layout.astro';
+import SchemaGraph from '../components/SchemaGraph.astro';
+import ContactForm from '../components/ContactForm.astro';
+import siteConfig from '../data/site.config.json';
+import { fetchAllPages, requirePage } from '../lib/fetchPages';
+
+const pages = await fetchAllPages();
+const content = requirePage(pages, 'homepage');
+const siteUrl = `https://${siteConfig.domain}`;
+
+const breadcrumbs = [{ name: 'Home', url: `${siteUrl}/` }];
+---
+
+<Layout title={content.title} description={content.meta.description} canonical={`${siteUrl}/`}>
+  <SchemaGraph
+    slot="head"
+    pageType="homepage"
+    faqs={content.faq}
+    breadcrumbs={breadcrumbs}
+  />
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <Fragment set:html={content.body} />
+    <ContactForm projectId={siteConfig.projectId} projectName={siteConfig.slug} />
+  </main>
+</Layout>
