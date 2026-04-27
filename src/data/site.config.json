@@ -1,0 +1,23 @@
+{
+  "projectId": "be8e444d-0843-43ef-a76c-6f83a8652882",
+  "niche": "idraulico",
+  "city": "Formia",
+  "services": [
+    "riparazione-perdite",
+    "installazione-caldaie"
+  ],
+  "zones": [
+    "centro",
+    "nord"
+  ],
+  "avatar": "in-pain",
+  "factoryApi": "https://factory-core.soliwkr.workers.dev",
+  "slug": "test-deploy-smoke",
+  "domain": null,
+  "gmbPlaceId": null,
+  "ga4MeasurementId": null,
+  "businessName": null,
+  "phone": null,
+  "address": null,
+  "geo": null
+}
